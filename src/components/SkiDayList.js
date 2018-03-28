@@ -4,32 +4,52 @@ import Terrain from 'react-icons/lib/md/terrain';
 import SnowFlak from 'react-icons/lib/ti/weather-snow';
 import Calendar from 'react-icons/lib/fa/calendar';
 import {SkiDayRow} from './SkiDayRow';
+import { Link } from 'react-router';
 
-export const SkiDayList = ({days}) => (
-	<table>
-		<thead>
-			<tr>
-				<th>Date</th>
-				<th>Resort</th>
-				<th>Powder</th>
-				<th>Back Country</th>
-			</tr>
-		</thead>
+export const SkiDayList = ({days, filter}) => {
 
-		<tbody>
-			{days.map((day,i) =>
-				<SkiDayRow key={i}
-							{...day} />
-			)}
-		</tbody>
-	</table>
-)
+	const filterdays = (!filter || filter !== 'powder' || filter !== 'backcountry') ? days : days.filter(day => day[filter]);
+	return (
+		<div className="ski-day-list">
+			<table>
+				<thead>
+					<tr>
+						<th>Date</th>
+						<th>Resort</th>
+						<th>Powder</th>
+						<th>Back Country</th>
+					</tr>
 
+					<tr>
+						<td colSpan={4}>
+							<Link to="/skiDay">
+								All Days
+							</Link>
+							<Link to="/skiDay/powder">
+								Powder
+							</Link>
+							<Link to="/skiDay/backcountry">
+								Back Country
+							</Link>
+						</td>
+					</tr>
+				</thead>
+
+				<tbody>
+					{filterdays.map((day,i) =>
+						<SkiDayRow key={i}
+									{...day} />
+					)}
+				</tbody>
+			</table>
+		</div>
+	)
+}
 
 // Setting up default values for days if it is not being passed
-/*SkiDayList.defaultProps = {
+SkiDayList.defaultProps = {
 	days :[{
-			
+			resort:'Daman',
 			date : new Date(),
 			powder : true,
 			backcountry : false
@@ -49,7 +69,7 @@ export const SkiDayList = ({days}) => (
 			backcountry : false
 
 		}]
-}*/
+}
 
 // propType is used for pass parameter/data in specific format also we can set that fileds is required or not 
 // We can see error in console
