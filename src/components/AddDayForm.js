@@ -1,6 +1,36 @@
 import React, { Component}  from 'react';
 import {Menu} from './Menu';
 
+const resortList = [
+	"Alpine",
+	"Boreall",
+	"Homewood",
+	"Sugar Bowl"
+];
+
+class AutoComplete extends Component {
+	get value(){
+		return this.refs.inputResort.value;
+	}
+
+	set value(inputValue) {
+		this.refs.inputResort.value = inputValue;
+	}
+
+	render() {
+		return (
+			<div>
+				<input ref="inputResort" type="text" list="list-resort" />
+				<datalist id="list-resort">
+					{this.props.options.map(
+							(opt, i) => <option key={i}>{opt}</option>
+						)}
+				</datalist>
+			</div>
+		)
+	}
+}
+
 // Stateless component
 export const AddDayForm = ({ resort, date, powder, backcountry, onNewDay}) => {
 
@@ -31,14 +61,12 @@ export const AddDayForm = ({ resort, date, powder, backcountry, onNewDay}) => {
 
 	return (
 		<form className="add-day-form" onSubmit={submit}>
+
 			<h1> Add Day </h1>
 			<label htmlFor='resport'>Resort Name </label>
-			<input 
-				id="resport" 
-				type="text" 
-				required 
-				defaultValue={resort}
+			<AutoComplete options={resortList}
 				ref={input => _resort = input}/>
+			
 
 			<label htmlFor='date'>Date</label>
 			<input id="date" type="date" required defaultValue={date} ref={input => _date = input}/>
