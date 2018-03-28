@@ -1,49 +1,95 @@
-import React from 'react';
+import React, { Component}  from 'react';
 import PropTypes from 'react';
 import Terrain from 'react-icons/lib/md/terrain';
 import SnowFlak from 'react-icons/lib/ti/weather-snow';
 import Calendar from 'react-icons/lib/fa/calendar';
 import {SkiDayRow} from './SkiDayRow';
 import { Link } from 'react-router';
+import {AddDayForm} from './AddDayForm';
 
-export const SkiDayList = ({days, filter}) => {
+export class SkiDayList extends Component {	
 
-	const filterdays = (!filter || filter !== 'powder' || filter !== 'backcountry') ? days : days.filter(day => day[filter]);
-	return (
-		<div className="ski-day-list">
-			<table>
-				<thead>
-					<tr>
-						<th>Date</th>
-						<th>Resort</th>
-						<th>Powder</th>
-						<th>Back Country</th>
-					</tr>
+	constructor(props) {
+		super(props);
+		this.addNewDay = this.addNewDay.bind(this);
+		this.state = {
+			days :[{
+			resort:'Daman',
+			date : new Date(),
+			powder : true,
+			backcountry : false
 
-					<tr>
-						<td colSpan={4}>
-							<Link to="/skiDay">
-								All Days
-							</Link>
-							<Link to="/skiDay/powder">
-								Powder
-							</Link>
-							<Link to="/skiDay/backcountry">
-								Back Country
-							</Link>
-						</td>
-					</tr>
-				</thead>
+		},
+		{
+			resort:'Daman',
+			date : new Date(),
+			powder : false,
+			backcountry : true
 
-				<tbody>
-					{filterdays.map((day,i) =>
-						<SkiDayRow key={i}
-									{...day} />
-					)}
-				</tbody>
-			</table>
-		</div>
-	)
+		},
+		{
+			resort:'Diu',
+			date : new Date(),
+			powder : true,
+			backcountry : false
+
+		}]
+		}
+	}
+
+	// const filterdays = (!filter || filter !== 'powder' || filter !== 'backcountry') ? 
+	// 					days : days.filter(day => day[filter]);
+
+	addNewDay(newDay) {
+		this.setState({
+			days : [
+				...this.state.days,
+				newDay
+			]
+		});
+	}
+
+	render() {
+		const days = this.props.days;
+
+		return (
+			<div className="ski-day-list">
+				<AddDayForm onNewDay={this.addNewDay}/>
+				<table>
+					<thead>
+						<tr>
+							<th>Date</th>
+							<th>Resort</th>
+							<th>Powder</th>
+							<th>Back Country</th>
+						</tr>
+
+						<tr>
+							<td colSpan={4}>
+								<Link to="/skiDay">
+									All Days
+								</Link>
+								<Link to="/skiDay/powder">
+									Powder
+								</Link>
+								<Link to="/skiDay/backcountry">
+									Back Country
+								</Link>
+							</td>
+						</tr>
+					</thead>
+
+					<tbody>
+						{days.map((day,i) =>
+							<SkiDayRow key={i}
+										{...day} />
+						)}
+					</tbody>
+				</table>
+			</div>
+		)
+	}
+	
 }
 
 // Setting up default values for days if it is not being passed
